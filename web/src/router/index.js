@@ -1,8 +1,32 @@
+import axios from 'axios'
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import AboutView from '../views/AboutView.vue'
+import DashboardView from '../views/DashboardView.vue'
 import HomeView from '../views/HomeView.vue'
 
 Vue.use(VueRouter)
+
+async function validateSession(){
+  if(localStorage.getItem('token') != undefined){
+
+    var req = {
+      headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    }
+    
+    try{
+      await axios.post('http://localhost:3300/user/authenticate', {}, req);
+    }catch(err){
+      return false;
+    }
+    return true;
+  }
+  else{
+    return false;
+  }
+}
 
 const routes = [
   {
@@ -13,10 +37,15 @@ const routes = [
   {
     path: '/about',
     name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+    component: AboutView
+  },
+  {
+    path: '/dashboard',
+    name: 'dashboard',
+    component: DashboardView,
+    beforeEnter: async (to, from, next) => {
+      await validateSession() ? next() : next('/')
+    }
   }
 ]
 
