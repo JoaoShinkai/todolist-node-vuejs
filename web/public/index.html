@@ -8,6 +8,21 @@
     <title><%= htmlWebpackPlugin.options.title %></title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@latest/css/materialdesignicons.min.css">
+    <style>
+      body::-webkit-scrollbar {
+        width: 16px;               /* width of the entire scrollbar */
+      }
+
+      body::-webkit-scrollbar-track {
+        background: #23222a ;        /* color of the tracking area */
+      }
+
+      body::-webkit-scrollbar-thumb {
+        background-color: #e1e1e1;    /* color of the scroll thumb */
+        border-radius: 20px;       /* roundness of the scroll thumb */
+        border: 6px solid #23222a;  /* creates padding around scroll thumb */
+      }
+    </style>
   </head>
   <body>
     <noscript>
