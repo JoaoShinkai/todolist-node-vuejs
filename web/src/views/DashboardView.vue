@@ -1,33 +1,108 @@
 <template>
-    <div class="todolist-dashboard">
-        <div class="todolist-dashboard-button">
-            <v-btn class="mx-2" fab dark color="deep-purple lighten-2">
-                <v-icon dark>
-                    mdi-plus
-                </v-icon>
-            </v-btn>
+    <div>
+        <navbar-component/>
+        <div class="todolist-dashboard">
+            <div class="todolist-dashboard-button">
+                <!-- Modal de criação de categoria -->
+                <v-dialog v-model="dialog" max-width="480">
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn class="mx-2" v-bind="attrs" v-on="on" fab dark color="deep-purple lighten-2">
+                            <v-icon dark>
+                                mdi-plus
+                            </v-icon>
+                        </v-btn>
+                    </template>
+                    <v-card>
+                        <v-card-title class="text-h5 deep-purple--text" style="padding: 22px 24px">Novo lembrete</v-card-title>
+                        <v-card-text>
+                            <form action="">
+                                <!-- Date Picker -->
+                                <v-menu ref="menu" v-model="menu" :close-on-content-click="false" :return-value.sync="form.date" transition="scale-transition" offset-y min-width="auto">
+                                    <template v-slot:activator="{ on, attrs }">
+                                        <v-text-field v-model="form.date" label="Picker in menu" prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on" outlined></v-text-field>
+                                    </template>
+                                    <v-date-picker color="deep-purple lighten-2" v-model="form.date" no-title scrollable>
+                                        <v-spacer></v-spacer>
+                                        <v-btn text color="deep-purple lighten-2" @click="menu = false">
+                                            Cancel
+                                        </v-btn>
+                                        <v-btn color="deep-purple lighten-2" style="color: white" @click="$refs.menu.save(form.date)">
+                                            OK
+                                        </v-btn>
+                                    </v-date-picker>
+                                </v-menu>
+
+                                <!-- Time Picker -->
+                                <v-dialog ref="dialog" v-model="modal2" :return-value.sync="form.time" width="290px">
+                                    <template v-slot:activator="{ on, attrs }">
+                                        <v-text-field v-model="form.time" label="Picker in dialog" prepend-icon="mdi-clock-time-four-outline" readonly v-bind="attrs" v-on="on" outlined></v-text-field>
+                                    </template>
+                                    <v-time-picker color="deep-purple lighten-2" v-if="modal2" v-model="form.time" full-width>
+                                        <v-spacer></v-spacer>
+                                        <v-btn text color="deep-purple lighten-2" @click="modal2 = false">
+                                            Cancel
+                                        </v-btn>
+                                        <v-btn text color="deep-purple lighten-2" @click="$refs.dialog.save(form.time)">
+                                            OK
+                                        </v-btn>
+                                    </v-time-picker>
+                                </v-dialog>
+                                <v-text-field v-model="form.description" label="Descrição" outlined></v-text-field>
+                            </form>
+                        </v-card-text>
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn color="deep-purple lighten-2" text @click="dialog = false">
+                                Fechar
+                            </v-btn>
+                            <v-btn color="deep-purple lighten-2" text @click="createSchedule()">
+                                Cadastrar
+                            </v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-dialog>
+            </div>
+            <div class="todolist-dashboard-schedules">
+                <card-component  v-for="schedule in this.schedules" :key="schedule.id" :description="schedule.description" :date="schedule.date"/>
+            </div>
         </div>
-        <div class="todolist-dashboard-schedules">
-            <card-component  v-for="schedule in this.schedules" :key="schedule.id" :description="schedule.description"/>
-        </div>
+        <alert-component v-if="alert.isVisible" :message="alert.message" :status="alert.status" @closeAlert="alert.isVisible = false"/>
     </div>
 </template>
 
 <script>
-// import jwt_decode from 'jwt-decode'
+import jwt_decode from 'jwt-decode'
 import axios from 'axios'
 import CardComponent from '../components/CardComponent.vue'
+import NavbarComponent from '../components/NavbarComponent.vue'
+import AlertComponent from '../components/AlertComponent.vue'
 
 export default {
     name: 'DashboardView',
     data(){
         return{
+            
+            menu: false,
+            modal2: false,
+            dialog: false,
             token: localStorage.getItem('token'),
-            schedules: []
+            schedules: [],
+            form: {
+                date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
+                time: null,
+                description: ''
+            },
+            alert: {
+                isVisible: false,
+                message: '',
+                status: 0
+            }
         }
     },
     components: {
-        CardComponent
+        CardComponent,
+        NavbarComponent,
+        AlertComponent
     },
     methods: {
         async loadSchedules(){
@@ -44,6 +119,43 @@ export default {
             }catch(err){
                 console.log(err);
             }
+        },
+        async createSchedule() {
+            try{
+
+                var req = {
+                    headers: {
+                        Authorization: `Bearer ${this.token}`
+                    }
+                }
+
+                const {id} = jwt_decode(this.token);
+
+                const schedule = {
+                    date: `${this.form.date} ${this.form.time}`,
+                    description: this.form.description,
+                    user: {
+                        id
+                    }
+                }
+
+                
+                const result = await axios.post('http://localhost:3300/scheduling/', schedule, req);
+
+                this.alert.message = "Novo lembrete adicionado com sucesso";
+                this.alert.status = 1,
+                this.alert.isVisible = true
+                this.dialog = false
+                setTimeout(() => {
+                    this.alert.isVisible = false
+                },5300)
+
+                await this.loadSchedules();
+
+                console.log(result);
+            }catch(err){
+                console.log(err)
+            }
         }
     },
     created: async function() {
@@ -56,7 +168,7 @@ export default {
 .todolist-dashboard{
     background-color: #23222a;
     min-height: 100vh;
-    padding: 10px;
+    padding-top: 48px;
 }
 .todolist-dashboard-schedules{
     display: grid;

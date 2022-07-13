@@ -87,7 +87,7 @@ import AlertComponent from '../components/AlertComponent.vue'
 </script>
 <style>
 *{
-  color: white;
+  
 }
 .todolist-login{
   background-color: #23222a;
@@ -110,6 +110,7 @@ import AlertComponent from '../components/AlertComponent.vue'
   padding: 10px 5px 25px 5px;
   font-size: 20px;
   border-bottom: dashed 1px #e1e1e1;
+  color: white;
 }
 .todolist-login-container-form{
   padding-top: 25px;

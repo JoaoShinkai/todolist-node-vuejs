@@ -1,5 +1,5 @@
 <template>
-    <v-snackbar v-model="snackbar" v-bind:color="status == 0 ? 'red' : 'green'" style="justify-content: end; align-items: flex-start">
+    <v-snackbar v-model="snackbar" v-bind:color="status == 0 ? 'red' : 'green'" style="justify-content: end; align-items: flex-start; z-index: 999999">
         {{message}}
         <template v-slot:action="{ attrs }">
             <v-btn color="white" text v-bind="attrs" @click="snackbar = false, emitCloseAlert()">

@@ -13,36 +13,33 @@
       ></v-progress-linear>
     </template>
 
-    <v-card-title>Lembrete agendado para: </v-card-title>
+    <v-card-title style="color: white">Lembrete agendado </v-card-title>
 
     <v-card-text style="flex: 1">
       
         <div class="todolist-card-dategroup">
-            <div>14/12/2001</div>
-            <div>14:30</div>
+            <div>{{date | dateConvert}}</div>
+            <div>{{date | timeConvert}}</div>
         </div>
 
         <div class="my-4 todolist-card-subtitle">
             Detalhes
         </div>
 
-        <div>{{description}}</div>
+        <div style="color: white">{{description}}</div>
     </v-card-text>
 
     <v-divider class="mx-4"></v-divider>
 
     <v-card-actions>
-      <v-btn
-        color="pink lighten-1"
-        text
-        @click="reserve"
-      >
+      <v-btn color="deep-purple lighten-2" text>
         Excluir
       </v-btn>
     </v-card-actions>
   </v-card>
 </template>
 <script>
+import {format} from 'date-fns';
 export default {
     data() {
         return{
@@ -51,7 +48,15 @@ export default {
     },
     props: {
         description: String,
-        date: Date
+        date: String
+    },
+    filters: {
+        dateConvert: function(date){
+            return format(Date.parse(date), 'dd/MM/yyyy')
+        },
+        timeConvert: function(date){
+            return format(Date.parse(date), 'kk:mm')
+        }
     }
 }
 </script>
@@ -61,9 +66,11 @@ export default {
     display: flex;
     flex-direction: column;
 }
+
 .todolist-card-dategroup{
     display: flex;
     grid-gap: 8px;
+    color: white;
 }
 .todolist-card-dategroup div{
     background-color: #9575cd;
@@ -73,5 +80,6 @@ export default {
 .todolist-card-subtitle{
     font-size: 1.25rem;
     font-weight: 500;
+    color: white;
 }
 </style>
