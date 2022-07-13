@@ -32,15 +32,18 @@
         
       </v-form>
     </div>
+    <alert-component v-if="alert.visible" :message="alert.message" :status="alert.status" @closeAlert="alert.visible = false"/>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
+import AlertComponent from '../components/AlertComponent.vue'
   export default {
     name: 'HomeView',
 
     components: {
+      AlertComponent
     },
 
     data () {
@@ -48,6 +51,11 @@ import axios from 'axios';
         form: {
           email: '',
           password: ''
+        },
+        alert: {
+          visible: false,
+          message: '',
+          status: ''
         }
       }
     },
@@ -63,6 +71,14 @@ import axios from 'axios';
 
           console.log(res);
         }catch(err){
+          // Criação do alert
+          this.alert.message = err.response.data.message;
+          this.alert.status = 0;
+          this.alert.visible = true
+          setTimeout(() => {
+            this.alert.visible = false
+          },5300)
+          
           console.log(err);
         }
       }
