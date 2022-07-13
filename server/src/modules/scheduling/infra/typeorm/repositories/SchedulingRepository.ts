@@ -17,4 +17,17 @@ export class SchedulingRepository implements ISchedulingRepository {
   async find(id: number): Promise<ISchedulingDTO | undefined> {
     return this.repository.findOne(id, { relations: ['user'] });
   }
+
+  async list(id: number): Promise<ISchedulingDTO[]> {
+    return this.repository.find({
+      where: {
+        user: {
+          id
+        }
+      },
+      order: {
+        date: 'ASC'
+      }
+    });
+  }
 }

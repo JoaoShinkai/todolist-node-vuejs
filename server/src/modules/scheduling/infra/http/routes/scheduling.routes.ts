@@ -14,4 +14,6 @@ schedulingRoutes.post(
   schedulingController.create
 );
 
+schedulingRoutes.get('/', userAuth, schedulingController.list);
+
 export { schedulingRoutes };
