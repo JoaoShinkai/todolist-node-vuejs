@@ -42,7 +42,7 @@ export class createSchedulingTable1657413947109 implements MigrationInterface {
         foreignKeys: [
           {
             name: 'scheduling_user_fk',
-            referencedTableName: 'scheduling',
+            referencedTableName: 'user',
             referencedColumnNames: ['id'],
             columnNames: ['user_id']
           }
