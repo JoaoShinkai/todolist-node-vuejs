@@ -1,6 +1,6 @@
 import { ISchedulingDTO } from '@modules/scheduling/dtos/ISchedulingDTO';
 import { ISchedulingRepository } from '@modules/scheduling/repositories/ISchedulingRepository';
-import { getRepository, Repository } from 'typeorm';
+import { getRepository, LessThan, MoreThan, Repository } from 'typeorm';
 import { Scheduling } from '../entities/Scheduling';
 
 export class SchedulingRepository implements ISchedulingRepository {
@@ -23,10 +23,25 @@ export class SchedulingRepository implements ISchedulingRepository {
       where: {
         user: {
           id
-        }
+        },
+        date: MoreThan(new Date(Date.now()))
       },
       order: {
         date: 'ASC'
+      }
+    });
+  }
+
+  async listOlder(id: number): Promise<ISchedulingDTO[]> {
+    return this.repository.find({
+      where: {
+        user: {
+          id
+        },
+        date: LessThan(new Date(Date.now()))
+      },
+      order: {
+        date: 'DESC'
       }
     });
   }

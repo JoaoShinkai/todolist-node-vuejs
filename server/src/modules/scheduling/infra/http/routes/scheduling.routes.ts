@@ -15,5 +15,6 @@ schedulingRoutes.post(
 );
 
 schedulingRoutes.get('/', userAuth, schedulingController.list);
+schedulingRoutes.get('/list/older', userAuth, schedulingController.listOlder);
 
 export { schedulingRoutes };
