@@ -11,13 +11,21 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn icon>
-        <v-icon>mdi-heart</v-icon>
-      </v-btn>
 
       <v-btn icon>
         <v-icon>mdi-magnify</v-icon>
       </v-btn>
+      <router-link to="/dashboard/older">
+        <v-btn icon>
+          <i class="fa-solid fa-clock-rotate-left"></i>
+        </v-btn>
+      </router-link>
+      
+      <router-link to="/dashboard">
+        <v-btn icon>
+          <i class="fa-solid fa-house"></i>
+        </v-btn>
+      </router-link>
 
       <v-menu
         left

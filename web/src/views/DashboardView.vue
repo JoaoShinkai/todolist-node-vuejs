@@ -13,18 +13,18 @@
                         </v-btn>
                     </template>
                     <v-card>
-                        <v-card-title class="text-h5 deep-purple--text" style="padding: 22px 24px">Adicionar lembrete</v-card-title>
+                        <v-card-title class="text-h5" style="padding: 22px 24px; color: #9575cd"><i class="fa-solid fa-stopwatch mr-3"></i> Adicionar lembrete</v-card-title>
                         <v-card-text>
                             <form action="">
                                 <!-- Date Picker -->
                                 <v-menu ref="menu" v-model="menu" :close-on-content-click="false" :return-value.sync="form.date" transition="scale-transition" offset-y min-width="auto">
                                     <template v-slot:activator="{ on, attrs }">
-                                        <v-text-field v-model="form.date" label="Data" prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on" outlined></v-text-field>
+                                        <v-text-field color="deep-purple lighten-2" v-model="form.date" label="Data" prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on" outlined></v-text-field>
                                     </template>
                                     <v-date-picker color="deep-purple lighten-2" v-model="form.date" no-title scrollable>
                                         <v-spacer></v-spacer>
                                         <v-btn text color="deep-purple lighten-2" @click="menu = false">
-                                            Cancel
+                                            Fechar
                                         </v-btn>
                                         <v-btn color="deep-purple lighten-2" style="color: white" @click="$refs.menu.save(form.date)">
                                             OK
@@ -35,19 +35,19 @@
                                 <!-- Time Picker -->
                                 <v-dialog ref="dialog" v-model="modal2" :return-value.sync="form.time" width="290px">
                                     <template v-slot:activator="{ on, attrs }">
-                                        <v-text-field v-model="form.time" label="Hora" prepend-icon="mdi-clock-time-four-outline" readonly v-bind="attrs" v-on="on" outlined></v-text-field>
+                                        <v-text-field color="deep-purple lighten-2" v-model="form.time" label="Hora" prepend-icon="mdi-clock-time-four-outline" readonly v-bind="attrs" v-on="on" outlined></v-text-field>
                                     </template>
                                     <v-time-picker color="deep-purple lighten-2" v-if="modal2" v-model="form.time" full-width>
                                         <v-spacer></v-spacer>
                                         <v-btn text color="deep-purple lighten-2" @click="modal2 = false">
-                                            Cancel
+                                            Fechar
                                         </v-btn>
                                         <v-btn text color="deep-purple lighten-2" @click="$refs.dialog.save(form.time)">
                                             OK
                                         </v-btn>
                                     </v-time-picker>
                                 </v-dialog>
-                                <v-text-field v-model="form.description" label="Descrição" outlined></v-text-field>
+                                <v-text-field color="deep-purple lighten-2" prepend-icon="mdi-card-text" v-model="form.description" label="Descrição" outlined></v-text-field>
                             </form>
                         </v-card-text>
                         <v-card-actions>
@@ -56,14 +56,18 @@
                                 Fechar
                             </v-btn>
                             <v-btn color="deep-purple lighten-2" text @click="createSchedule()">
-                                Cadastrar
+                                Confirmar
                             </v-btn>
                         </v-card-actions>
                     </v-card>
                 </v-dialog>
             </div>
-            <div class="todolist-dashboard-schedules">
+            <div v-if="this.schedules.length > 0" class="todolist-dashboard-schedules">
                 <card-component  v-for="schedule in this.schedules" :key="schedule.id" :description="schedule.description" :date="schedule.date"/>
+            </div>
+            <div v-else class="todolist-dashboard-schedules-empty">
+                <i class="fa-solid fa-calendar-xmark"></i>
+                <div>Você não possui nenhum agendamento por enquanto</div>
             </div>
         </div>
         <alert-component v-if="alert.isVisible" :message="alert.message" :status="alert.status" @closeAlert="alert.isVisible = false"/>
@@ -191,6 +195,8 @@ export default {
     background-color: #23222a;
     min-height: 100vh;
     padding-top: 48px;
+    display: flex;
+    flex-direction: column;
 }
 .todolist-dashboard-schedules{
     display: grid;
@@ -202,5 +208,18 @@ export default {
     display: flex;
     justify-content: end;
     padding: 15px 0;
+}
+.todolist-dashboard-schedules-empty{
+    color: white;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-size:35px;
+    grid-gap: 35px;
+}
+.todolist-dashboard-schedules-empty i{
+    font-size: 120px;
 }
 </style>

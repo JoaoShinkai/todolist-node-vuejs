@@ -4,6 +4,7 @@ import VueRouter from 'vue-router'
 import AboutView from '../views/AboutView.vue'
 import DashboardView from '../views/DashboardView.vue'
 import HomeView from '../views/HomeView.vue'
+import OlderSchedulesView from '../views/OlderSchedulesView.vue'
 
 Vue.use(VueRouter)
 
@@ -43,6 +44,14 @@ const routes = [
     path: '/dashboard',
     name: 'dashboard',
     component: DashboardView,
+    beforeEnter: async (to, from, next) => {
+      await validateSession() ? next() : next('/')
+    }
+  },
+  {
+    path: '/dashboard/older',
+    name: 'dashboard-older',
+    component: OlderSchedulesView,
     beforeEnter: async (to, from, next) => {
       await validateSession() ? next() : next('/')
     }
