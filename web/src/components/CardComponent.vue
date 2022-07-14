@@ -13,16 +13,17 @@
       ></v-progress-linear>
     </template>
 
-    <v-card-title style="color: white">Lembrete agendado </v-card-title>
+    <v-card-title style="color: white"><i class="fa-solid fa-calendar-check mr-3"></i>Lembrete agendado </v-card-title>
 
     <v-card-text style="flex: 1">
       
         <div class="todolist-card-dategroup">
-            <div>{{date | dateConvert}}</div>
-            <div>{{date | timeConvert}}</div>
+            <div><i class="fa-solid fa-calendar-day"></i> {{date | dateConvert}}</div>
+            <div><i class="fa-solid fa-clock"></i> {{date | timeConvert}}</div>
         </div>
 
         <div class="my-4 todolist-card-subtitle">
+            <i class="fa-solid fa-comment"></i>
             Detalhes
         </div>
 
@@ -33,7 +34,7 @@
 
     <v-card-actions>
       <v-btn color="deep-purple lighten-2" text>
-        Excluir
+        <i class="fa-solid fa-trash-can"></i> Excluir
       </v-btn>
     </v-card-actions>
   </v-card>

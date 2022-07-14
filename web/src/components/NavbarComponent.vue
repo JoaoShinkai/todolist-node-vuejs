@@ -34,8 +34,8 @@
         </template>
 
         <v-list>
-          <v-list-item>
-            <v-list-item-title>Option</v-list-item-title>
+          <v-list-item class="todolist-navbar-item" @click="logout()">
+            <v-list-item-title>Sair</v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>
@@ -49,6 +49,12 @@ export default {
         return{
 
         }
+    },
+    methods: {
+        logout(){
+            localStorage.removeItem('token');
+            this.$router.push({name: 'home'})
+        }
     }
 }
 </script>
@@ -59,5 +65,12 @@ export default {
     position: fixed;
     width: 100%;
     z-index: 9999;
+}
+.todolist-navbar-item{
+    cursor: pointer;
+    min-width: 150px;
+}
+.todolist-navbar-item:hover{
+    background-color: #e1e1e1;
 }
 </style>

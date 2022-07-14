@@ -13,13 +13,13 @@
                         </v-btn>
                     </template>
                     <v-card>
-                        <v-card-title class="text-h5 deep-purple--text" style="padding: 22px 24px">Novo lembrete</v-card-title>
+                        <v-card-title class="text-h5 deep-purple--text" style="padding: 22px 24px">Adicionar lembrete</v-card-title>
                         <v-card-text>
                             <form action="">
                                 <!-- Date Picker -->
                                 <v-menu ref="menu" v-model="menu" :close-on-content-click="false" :return-value.sync="form.date" transition="scale-transition" offset-y min-width="auto">
                                     <template v-slot:activator="{ on, attrs }">
-                                        <v-text-field v-model="form.date" label="Picker in menu" prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on" outlined></v-text-field>
+                                        <v-text-field v-model="form.date" label="Data" prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on" outlined></v-text-field>
                                     </template>
                                     <v-date-picker color="deep-purple lighten-2" v-model="form.date" no-title scrollable>
                                         <v-spacer></v-spacer>
@@ -35,7 +35,7 @@
                                 <!-- Time Picker -->
                                 <v-dialog ref="dialog" v-model="modal2" :return-value.sync="form.time" width="290px">
                                     <template v-slot:activator="{ on, attrs }">
-                                        <v-text-field v-model="form.time" label="Picker in dialog" prepend-icon="mdi-clock-time-four-outline" readonly v-bind="attrs" v-on="on" outlined></v-text-field>
+                                        <v-text-field v-model="form.time" label="Hora" prepend-icon="mdi-clock-time-four-outline" readonly v-bind="attrs" v-on="on" outlined></v-text-field>
                                     </template>
                                     <v-time-picker color="deep-purple lighten-2" v-if="modal2" v-model="form.time" full-width>
                                         <v-spacer></v-spacer>
@@ -89,7 +89,7 @@ export default {
             schedules: [],
             form: {
                 date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
-                time: null,
+                time: '00:00',
                 description: ''
             },
             alert: {
@@ -121,41 +121,63 @@ export default {
             }
         },
         async createSchedule() {
-            try{
 
-                var req = {
-                    headers: {
-                        Authorization: `Bearer ${this.token}`
-                    }
-                }
+            const formatedDate = Date.parse(`${this.form.date} ${this.form.time}`);
+            const formatedNowDate = Date.parse(new Date());
 
-                const {id} = jwt_decode(this.token);
-
-                const schedule = {
-                    date: `${this.form.date} ${this.form.time}`,
-                    description: this.form.description,
-                    user: {
-                        id
-                    }
-                }
-
-                
-                const result = await axios.post('http://localhost:3300/scheduling/', schedule, req);
-
-                this.alert.message = "Novo lembrete adicionado com sucesso";
-                this.alert.status = 1,
-                this.alert.isVisible = true
-                this.dialog = false
-                setTimeout(() => {
-                    this.alert.isVisible = false
-                },5300)
-
-                await this.loadSchedules();
-
-                console.log(result);
-            }catch(err){
-                console.log(err)
+            
+            if(formatedDate <= formatedNowDate){
+                this.showAlert("A data deve ser maior que a data atual", 0)
             }
+            else if(this.form.description == undefined || this.form.description == null || this.form.description == ''){
+                this.showAlert("O campo descrição não pode ser nulo", 0)
+            }
+            else{
+                try{
+
+                    var req = {
+                        headers: {
+                            Authorization: `Bearer ${this.token}`
+                        }
+                    }
+
+                    const {id} = jwt_decode(this.token);
+
+                    const schedule = {
+                        date: `${this.form.date} ${this.form.time}`,
+                        description: this.form.description,
+                        user: {
+                            id
+                        }
+                    }
+
+                    
+                    const result = await axios.post('http://localhost:3300/scheduling/', schedule, req);
+
+                    this.alert.message = "Lembrete agendado com sucesso";
+                    this.alert.status = 1,
+                    this.alert.isVisible = true
+                    this.dialog = false
+                    setTimeout(() => {
+                        this.alert.isVisible = false
+                    },5300)
+
+                    await this.loadSchedules();
+
+                    console.log(result);
+                }catch(err){
+                    console.log(err)
+                }
+            }
+            
+        },
+        showAlert(message, statusCode){
+            this.alert.message = message;
+            this.alert.status = statusCode,
+            this.alert.isVisible = true
+            setTimeout(() => {
+                this.alert.isVisible = false
+            },5300)
         }
     },
     created: async function() {
