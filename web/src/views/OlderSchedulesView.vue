@@ -2,6 +2,7 @@
     <div>
         <navbar-component/>
         <div class="todolist-olderSchedules">
+            <div class="todolist-olderSchedules-title"><i class="fa-solid fa-calendar-days"></i>Aqui estão seu agendamentos passados</div>
             <div class="todolist-olderSchedules-schedules">
                 <card-component v-for="schedule in this.schedules" :key="schedule.id" :description="schedule.description" :date="schedule.date" data-progress='10%' />
             </div>
@@ -63,5 +64,13 @@ export default {
     grid-template-columns: repeat(auto-fill, 364px);
     grid-gap: 10px;
     justify-content: center;
+}
+.todolist-olderSchedules-title{
+    color: white;
+    padding: 30px;
+    font-size: 1.7rem;
+}
+.todolist-olderSchedules-title i{
+    margin-right: 10px;
 }
 </style>

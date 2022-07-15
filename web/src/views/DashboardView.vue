@@ -155,6 +155,8 @@ export default {
                         }
                     }
 
+                    console.log(schedule);
+
                     
                     const result = await axios.post('http://localhost:3300/scheduling/', schedule, req);
 
@@ -171,6 +173,7 @@ export default {
                     console.log(result);
                 }catch(err){
                     console.log(err)
+                    this.showAlert(err.response.data.message, 0);
                 }
             }
             
@@ -218,6 +221,7 @@ export default {
     flex-direction: column;
     font-size:35px;
     grid-gap: 35px;
+    text-align: center;
 }
 .todolist-dashboard-schedules-empty i{
     font-size: 120px;

@@ -23,6 +23,7 @@
               class="todolist-login-container-input"
               v-model="form.password"
           ></v-text-field>
+          <div class="todolist-login-container-form-inputs-register">Não possui uma conta? <router-link to="/register">Cadastre-se</router-link></div>
         </div>
         <div class="todolist-login-container-form-button">
           <v-btn type="submit" depressed>
@@ -86,9 +87,6 @@ import AlertComponent from '../components/AlertComponent.vue'
   }
 </script>
 <style>
-*{
-  
-}
 .todolist-login{
   background-color: #23222a;
   width: 100%;
@@ -132,6 +130,19 @@ import AlertComponent from '../components/AlertComponent.vue'
   color: white !important;
 }
 .todolist-login-container-input fieldset{
+  color: white !important;
+}
+.todolist-login-container-form-inputs-register{
+  color: white;
+  padding: 0 5px;
+}
+.todolist-login-container-form-inputs-register a{
+  text-decoration: none;
+  color: #9575cd !important;
+  font-weight: bold;
+}
+.todolist-login-container-form-button button{
+  background-color: #9575cd !important;
   color: white !important;
 }
 </style>

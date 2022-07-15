@@ -1,10 +1,10 @@
 import axios from 'axios'
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import AboutView from '../views/AboutView.vue'
 import DashboardView from '../views/DashboardView.vue'
 import HomeView from '../views/HomeView.vue'
 import OlderSchedulesView from '../views/OlderSchedulesView.vue'
+import RegisterView from '../views/RegisterView.vue'
 
 Vue.use(VueRouter)
 
@@ -36,9 +36,9 @@ const routes = [
     component: HomeView
   },
   {
-    path: '/about',
-    name: 'about',
-    component: AboutView
+    path: '/register',
+    name: 'register',
+    component: RegisterView
   },
   {
     path: '/dashboard',
