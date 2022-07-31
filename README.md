@@ -1,7 +1,7 @@
 
 # To Do List
 
-To Do List é uma aplicação que pode ser acessada pela web através do desktop ou mobile. É uma aplicação que permite o agendamento de notificações que serão enviadas através do email ao chegar a data, evitando assim que o usuário perca algum evento imporante.
+To Do List é uma aplicação que pode ser acessada pela web através do desktop ou mobile. É uma aplicação que permite o agendamento de notificações que serão enviadas através do email ao chegar a data, evitando assim que o usuário perca algum evento importante.
 
 ## Video
 
